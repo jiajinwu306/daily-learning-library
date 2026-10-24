@@ -6,6 +6,7 @@ from PIL import Image, ImageDraw
 SIZE = 256
 SCALE = 4
 OUT = Path(__file__).resolve().parent
+WEB_ICONS = OUT.parent / "public" / "icons"
 
 
 def box(*coords):
@@ -42,7 +43,21 @@ draw.line(points([(128, 89), (128, 195)]), fill="#D9D0B8", width=5 * SCALE)
 draw.line(points([(42, 180), (85, 184), (128, 200), (171, 184), (214, 180)]),
           fill="#F7C598", width=5 * SCALE, joint="curve")
 
-image = image.resize((SIZE, SIZE), Image.Resampling.LANCZOS)
-image.save(OUT / "book.png")
-image.save(OUT / "book.ico", sizes=[(16, 16), (24, 24), (32, 32),
-                                     (48, 48), (64, 64), (128, 128), (256, 256)])
+WEB_ICONS.mkdir(parents=True, exist_ok=True)
+desktop_icon = image.resize((SIZE, SIZE), Image.Resampling.LANCZOS)
+desktop_icon.save(OUT / "book.png")
+desktop_icon.save(OUT / "book.ico", sizes=[(16, 16), (24, 24), (32, 32),
+                                             (48, 48), (64, 64), (128, 128), (256, 256)])
+
+for size in (192, 512):
+    image.resize((size, size), Image.Resampling.LANCZOS).save(
+        WEB_ICONS / f"icon-{size}.png"
+    )
+
+maskable = Image.new("RGBA", (512, 512), "#193D3B")
+padded_icon = image.resize((416, 416), Image.Resampling.LANCZOS)
+maskable.alpha_composite(padded_icon, (48, 48))
+maskable.save(WEB_ICONS / "maskable-512.png")
+maskable.resize((180, 180), Image.Resampling.LANCZOS).save(
+    WEB_ICONS / "apple-touch-icon.png"
+)

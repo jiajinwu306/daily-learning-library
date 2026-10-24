@@ -4,6 +4,10 @@
 
 在线使用：[每日所学](https://jiajinwu306.github.io/daily-learning-library/) · [GitHub 仓库](https://github.com/jiajinwu306/daily-learning-library)
 
+## 安卓手机使用
+
+用 Chrome 打开在线网址，点击浏览器右上角菜单，选择“安装应用”或“添加到主屏幕”，再确认安装。之后可直接点手机桌面的“每日所学”书本图标打开。首次在手机上使用需要登录同一个账号；记录仍在线同步，断网时无法读取或保存。
+
 ## 本地运行
 
 需要 Node.js 20 或更新版本。在本目录运行：
