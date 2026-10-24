@@ -2,6 +2,8 @@
 
 私人使用的三类学习知识库，支持 Excel 技能、心理学技巧和法律知识。手机和电脑均可通过浏览器使用。
 
+在线使用：[每日所学](https://jiajinwu306.github.io/daily-learning-library/) · [GitHub 仓库](https://github.com/jiajinwu306/daily-learning-library)
+
 ## 本地运行
 
 需要 Node.js 20 或更新版本。在本目录运行：
@@ -29,7 +31,7 @@ npm run dev
 1. 在仓库 `Settings > Secrets and variables > Actions > Variables` 添加 `VITE_SUPABASE_URL` 和 `VITE_SUPABASE_ANON_KEY`。两者是浏览器可见的公开配置，**不要**填写 service role key。
 2. 在 `Settings > Pages` 将 Source 设为 **GitHub Actions**。
 3. 在 `Actions` 中手动运行 `Deploy to GitHub Pages`，或之后推送 `main` 自动发布。缺少云端配置时工作流会直接失败，防止发布仅本机保存的预览版。
-4. 在 Supabase `Authentication > URL Configuration` 中，将 Pages 地址（形如 `https://用户名.github.io/仓库名/`）设为 Site URL，并加入 Redirect URLs，确保密码重置邮件回到正确页面。
+4. 在 Supabase `Authentication > URL Configuration` 中，将 Pages 地址设为 Site URL，并加入 Redirect URLs，确保密码重置邮件回到正确页面。本项目已配置 `https://jiajinwu306.github.io/daily-learning-library/`。
 
 也可以执行 `npm run build`，将 `dist/` 部署到其他静态托管服务，构建时同样需要设置两个 `VITE_` 环境变量。此应用使用单路径页面，无需额外路由回退配置。
 
