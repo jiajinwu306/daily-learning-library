@@ -1,6 +1,6 @@
 # 每日所学
 
-私人使用的三类学习知识库，支持 Excel 技能、心理学技巧和法律知识。手机和电脑均可通过浏览器使用。
+私人使用的学习知识库，支持 Excel 技能、心理学技巧、法律知识、Windows 快捷键和 AI 产品经理知识。手机和电脑均可通过浏览器使用。
 
 在线使用：[每日所学](https://jiajinwu306.github.io/daily-learning-library/) · [GitHub 仓库](https://github.com/jiajinwu306/daily-learning-library)
 
@@ -31,6 +31,8 @@ npm run dev
 4. 重启开发服务器，使用个人账号登录。记录通过行级安全策略限定为当前账号可读写。
 
 如果忘记密码，可在登录页请求重置邮件。Supabase 的 Authentication URL Configuration 中需要将正式站点地址加入 Site URL 和 Redirect URLs。
+
+从三类旧版本升级时，先在 SQL Editor 执行 [`supabase/migrations/20261125_add_learning_categories.sql`](supabase/migrations/20261125_add_learning_categories.sql)，再部署新版。这只扩展允许的类别，不修改现有笔记和访问策略。
 
 ## 发布到 GitHub Pages
 

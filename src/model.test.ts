@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest'
-import { filterNotes, localToday, sortNotes, validateNote, type Note } from './model'
+import { categories, categoryName, filterNotes, localToday, sortNotes, validateNote, type Note } from './model'
 
 const sample: Note[] = [
   { id: '1', category: 'excel', title: '快速填充', body: 'Ctrl + E\n=COUNTIF(B:B,B2)', source_url: null, learned_on: '2026-10-24', created_at: '2026-10-24T10:00:00Z', updated_at: '2026-10-24T10:00:00Z' },
@@ -8,6 +8,17 @@ const sample: Note[] = [
 ]
 
 describe('学习记录', () => {
+  it('新增方向可命名，并按关键词、类别和日期找回独立记录', () => {
+    const windows: Note = { ...sample[0], id: '4', category: 'windows', title: '剪贴板历史', body: 'Win + V 查看历史内容' }
+    const aiPm: Note = { ...sample[0], id: '5', category: 'ai_pm', title: '模型评估', body: '用任务完成率评估效果' }
+    expect(categories).toHaveLength(5)
+    expect(categoryName(windows.category)).toBe('Windows 快捷键')
+    expect(categoryName(aiPm.category)).toBe('AI 产品经理知识')
+    expect(filterNotes([...sample, windows, aiPm], 'win + v', 'windows', '2026-10-24')).toEqual([windows])
+    expect(filterNotes([...sample, windows, aiPm], '完成率', 'ai_pm', '2026-10-24')).toEqual([aiPm])
+    expect(filterNotes([windows, aiPm], '', 'ai_pm', '2026-10-23')).toEqual([])
+  })
+
   it('按本地日期保存，不被 UTC 日期偏移影响', () => {
     expect(localToday(new Date(2026, 9, 24, 0, 5))).toBe('2026-10-24')
   })

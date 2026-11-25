@@ -2,7 +2,7 @@ import { useCallback, useEffect, useMemo, useState, type FormEvent } from 'react
 import type { Session } from '@supabase/supabase-js'
 import {
   ArrowLeft, ArrowRight, BookOpen, BrainCircuit, CalendarDays, Check,
-  Download, FileText, LogOut, Plus, Scale, Search, Table2, Trash2, X,
+  Download, FileText, Keyboard, LogOut, Plus, Scale, Search, Sparkles, Table2, Trash2, X,
 } from 'lucide-react'
 import { cloudStore, isCloudConfigured, previewStore, supabase, type NoteStore } from './data'
 import {
@@ -13,7 +13,7 @@ import {
 type View = 'today' | 'library'
 type EditorTarget = { category: Category; note?: Note }
 
-const categoryIcons = { excel: Table2, psychology: BrainCircuit, law: Scale }
+const categoryIcons = { excel: Table2, psychology: BrainCircuit, law: Scale, windows: Keyboard, ai_pm: Sparkles }
 
 function errorMessage(error: unknown): string {
   return error instanceof Error ? error.message : '请检查网络后重试。'
@@ -252,7 +252,7 @@ function Workspace({ store, preview, email, onSignOut }: { store: NoteStore; pre
         {loadError && <div className="load-error" role="alert">{loadError}<button className="text-button" onClick={() => void load(true)}>重试</button></div>}
         {view === 'today' ? <>
           <div className="page-heading"><div><p className="eyebrow">{formatDate(today)}</p><h1>今天所学<span className="heading-accent">.</span></h1><p className="heading-meta">{recordedCategories === 0 ? '今天还没有记录' : `今天已记录 ${recordedCategories} 类 · ${todayNotes.length} 条知识`}</p></div><button className="primary-button top-add" type="button" onClick={() => setEditor({ category: 'excel' })}><Plus size={18} />新增记录</button></div>
-          <div className="section-heading"><span>三个方向</span><span>今日记录</span></div>
+          <div className="section-heading"><span>{categories.length} 个学习方向</span><span>今日记录</span></div>
           <div className="category-list">{categories.map((item) => {
             const Icon = categoryIcons[item.id]
             const group = todayNotes.filter((note) => note.category === item.id)

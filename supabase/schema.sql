@@ -2,7 +2,7 @@
 create table if not exists public.notes (
   id uuid primary key default gen_random_uuid(),
   user_id uuid not null references auth.users(id) on delete cascade,
-  category text not null check (category in ('excel', 'psychology', 'law')),
+  category text not null check (category in ('excel', 'psychology', 'law', 'windows', 'ai_pm')),
   title text not null check (length(trim(title)) > 0),
   body text not null check (length(trim(body)) > 0),
   source_url text,

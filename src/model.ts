@@ -1,4 +1,4 @@
-export type Category = 'excel' | 'psychology' | 'law'
+export type Category = 'excel' | 'psychology' | 'law' | 'windows' | 'ai_pm'
 
 export type Note = {
   id: string
@@ -17,6 +17,8 @@ export const categories: { id: Category; name: string; shortName: string; hint: 
   { id: 'excel', name: 'Excel 技能', shortName: 'Excel', hint: '公式、快捷键、操作步骤' },
   { id: 'psychology', name: '心理学技巧', shortName: '心理学', hint: '概念、观察、实际应用' },
   { id: 'law', name: '法律知识', shortName: '法律', hint: '主题、要点、资料来源' },
+  { id: 'windows', name: 'Windows 快捷键', shortName: 'Windows', hint: '组合键、使用场景、操作效果' },
+  { id: 'ai_pm', name: 'AI 产品经理知识', shortName: 'AI 产品经理', hint: '需求分析、模型能力、产品设计与评估' },
 ]
 
 export const categoryName = (category: Category) =>
