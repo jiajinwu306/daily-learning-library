@@ -6,6 +6,7 @@ on:
   workflow_dispatch:
 
 permissions:
+  actions: read
   contents: read
   pages: write
   id-token: write
@@ -46,4 +47,37 @@ jobs:
         with:
           path: dist
       - id: deployment
-        uses: actions/deploy-pages@v5
+        uses: actions/github-script@v8
+        with:
+          script: |
+            // Use the REST API because the artifact service can return an empty list after upload.
+            const repo = context.repo;
+            let artifact;
+            for (let attempt = 0; attempt < 12; attempt++) {
+              const { data } = await github.rest.actions.listWorkflowRunArtifacts({
+                ...repo, run_id: context.runId, name: 'github-pages', per_page: 100,
+              });
+              artifact = data.artifacts.find(item => item.name === 'github-pages' && !item.expired);
+              if (artifact) break;
+              await new Promise(resolve => setTimeout(resolve, 5000));
+            }
+            if (!artifact) throw new Error('The uploaded Pages artifact could not be found.');
+            const oidcToken = await core.getIDToken();
+            const { data: deployment } = await github.request('POST /repos/{owner}/{repo}/pages/deployments', {
+              ...repo, artifact_id: artifact.id, pages_build_version: context.sha, oidc_token: oidcToken,
+            });
+            core.setOutput('page_url', deployment.page_url);
+            for (let attempt = 0; attempt < 120; attempt++) {
+              const { data } = await github.request('GET /repos/{owner}/{repo}/pages/deployments/{deployment_id}', {
+                ...repo, deployment_id: deployment.id,
+              });
+              if (data.status === 'succeed') return;
+              if (['deployment_failed', 'deployment_content_failed', 'deployment_cancelled', 'deployment_lost'].includes(data.status)) {
+                throw new Error(`Pages deployment failed: ${data.status}`);
+              }
+              await new Promise(resolve => setTimeout(resolve, 5000));
+            }
+            await github.request('POST /repos/{owner}/{repo}/pages/deployments/{deployment_id}/cancel', {
+              ...repo, deployment_id: deployment.id,
+            });
+            throw new Error('Pages deployment timed out.');
